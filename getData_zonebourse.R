@@ -2,7 +2,10 @@
 library(XML)
 library(stringr)
 
+
+# ##############################################################################################################
 #Flux rss Zonebourse.com
+# ##############################################################################################################
 
 # fonction de lecture d'un flux
 getRSSitems <- function(RSSURL,level,print=TRUE) {
@@ -51,3 +54,37 @@ Invests$enclosure<-""
 All<-rbind(Actions,Invests,Indices,Forex,Warrants,Turbos,Actualites)
 All<-getISIN(All)
 All<- subset(All, select=c(-enclosure,-guid)) 
+
+
+# ##############################################################################################################
+# Aspirateur page Zonebourse.com
+# ##############################################################################################################
+library(RCurl)
+library(XML)
+
+url<-"http://www.zonebourse.com/GENFIT-16311755/fondamentaux/"
+script <- getURL(url)
+doc <- htmlParse(script)
+
+# le code qui est sous la forme
+# table class="ReutersTabInit"
+# doit être écrit sous la forme
+# //table[@class='ReutersTabInit']
+li <- getNodeSet(doc, "//table[@class='ReutersTabInit']")
+
+urls <- sapply(li, xmlGetAttr, "href")
+
+
+
+
+#   
+# # get ids for those with only 2 slashes (no 3rd in the end):
+# id <- which(nchar(gsub("[^/]", "", urls )) == 2)
+# slash_2 <- urls[id]
+# # find position of 3rd slash occurrence in strings:
+# slash_stop <- unlist(lapply(str_locate_all(urls, "/"),"[[", 3))
+# slash_3 <- substring(urls, first = 1, last = slash_stop - 1)
+# # final result, replace the ones with 2 slashes,
+# # which are lacking in slash_3:
+# blogs <- slash_3
+# blogs[id] <- slash_2
