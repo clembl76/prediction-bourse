@@ -66,16 +66,40 @@ url<-"http://www.zonebourse.com/GENFIT-16311755/fondamentaux/"
 script <- getURL(url)
 doc <- htmlParse(script)
 
+# 1ere methode
 # le code qui est sous la forme
 # table class="ReutersTabInit"
 # doit être écrit sous la forme
 # //table[@class='ReutersTabInit']
 li <- getNodeSet(doc, "//table[@class='ReutersTabInit']")
+li[[1]] #1st row
+li[[1]][[1]] #1st row, 
+li[[1]][[2]] #1st row, content
+#test2<-xmlSApply(li,xmlValue) # convertit le contenu en texte
 
-urls <- sapply(li, xmlGetAttr, "href")
+# 2e methode
+test <- xpathSApply(doc, "//td[@class='RC_tdL']") # récupère le contenu dans une liste
 
+#pb le contenu est dispatché entre 2 éléments qui se suivent 
 
+#le titre est dans <a>, la légende dans <span>
+# le contenu de la colonne de gauche dans <b>
+test[[1]]
 
+categoriesTableau <- xpathSApply(doc, "//td[@class='ReutersTabTitle']") #ok
+titresLignes<- xpathSApply(doc, "//a") #trop large
+valeursLignes<- xpathSApply(doc, "//b") #ok
+
+test[[1]][[1]]# test[[val impaire]][[1]] # Titre  # <a href="/formation/Capitalisation-boursiere-268/">&#13;Capitalisation</a> 
+test[[2]][[2]]# test[[val paire]][[2]] # Valeur col gauche # test[[2]][[2]] = 932M???
+
+test2 <- xpathSApply(doc, "//tr[@class='ReutersTabOdd']")
+# test3<- sapply(test2, xmlGetAttr, "style") # ok mais pas d'interet
+
+test3 <- xpathSApply(test2, "//td") # ko
+test3
+
+#urls <- sapply(li, xmlGetAttr, "href")
 
 #   
 # # get ids for those with only 2 slashes (no 3rd in the end):
