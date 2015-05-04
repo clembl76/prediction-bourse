@@ -121,19 +121,47 @@ url<-"http://www.zonebourse.com/bourse/actions/Europe-3/France-51/"
     doc <- htmlParse(script)
     
     for (i in 1:50) {
+        
+      #get NameISIN
       li <- getNodeSet(doc, paste("//td[@id='iAL",i,"']",sep=""))
+      if (length(li)==0) break
       DATA[(j-1)*50+i,1]<-gsub("/","",xmlGetAttr(li[[1]][[1]],"href"))
+      
+      #get secteur
       li <- getNodeSet(doc, "//td[@class='large200 center']") 
       DATA[(j-1)*50+i,2]<-xmlGetAttr(li[[i]][[1]],"title")
+      
+      # get Var1janv and Capitalisation_MUSD
+      li <- getNodeSet(doc, "//td[@class='large70 right pright20']")
+      DATA[(j-1)*50+i,3]<-xmlValue(li[[i*2-1]][[1]][[1]])
+      DATA[(j-1)*50+i,4]<-xmlValue(li[[i*2]][[1]])
+      
+      #get NoteInvestissement
+      li <- getNodeSet(doc, "//td[@class='large110 center']")
+      val<-xmlGetAttr(li[[i]][[1]],"title")
+      DATA[(j-1)*50+i,5]<-if(is.null(val)){NA}else{val}  
+      
+      #get trends Court Moyen Long terme
+      li <- getNodeSet(doc, "//td[@class='large20 center']")
+      DATA[(j-1)*50+i,6]<-if(is.null(li[[i]][[1]][[1]])){NA}else{strsplit(strsplit(xmlGetAttr(li[[i]][[1]][[1]],"src"),'.',fixed=TRUE)[[1]][[1]],'_',fixed=TRUE)[[1]][[2]]}             
+
+      #get page and row
+      DATA[(j-1)*50+i,9]<-j
+      DATA[(j-1)*50+i,10]<-i
+    
     }
-    rm(script);rm(doc);rm(li)    
+    rm(script);rm(doc);rm(li);rm(i);rm(j);rm(val)    
     return(DATA)   
 
   }
   
 rm(DATA)
-DATA<-data.frame(NameISIN=character(0),secteur=character(0))
-DATA$NameISIN<-as.character(DATA$NameISIN);DATA$secteur<-as.character(DATA$secteur)
+DATA<-data.frame(NameISIN=character(0),secteur=character(0),Var1janv=character(0),Capitalisation_MUSD=character(0),NoteInvestissement=character(0),CourtTerme=character(0),MoyenTerme=character(0),LongTerme=character(0),page=numeric(0),ligne=numeric(0))
+DATA$NameISIN<-as.character(DATA$NameISIN);DATA$secteur<-as.character(DATA$secteur);
+DATA$Var1janv<-as.character(DATA$Var1janv);DATA$Capitalisation_MUSD<-as.character(DATA$Capitalisation_MUSD);
+DATA$NoteInvestissement<-as.character(DATA$NoteInvestissement);DATA$CourtTerme<-as.character(DATA$CourtTerme);
+DATA$MoyenTerme<-as.character(DATA$MoyenTerme);DATA$LongTerme<-as.character(DATA$LongTerme);
+DATA$page<-as.character(DATA$page);DATA$ligne<-as.character(DATA$ligne);
 
 for (j in 1:20) {
   url<-paste("http://www.zonebourse.com/bourse/actions/Europe-3/France-51/?Req=&p=",j,sep="")
