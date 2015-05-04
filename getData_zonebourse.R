@@ -31,18 +31,18 @@ getRSSitems <- function(RSSURL,level,print=TRUE) {
 }
 
 level<-"item"
-Actions <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Actions",level) #Stratégie de Trading
-Invests <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalysesFondamentales.php",level)#Stratégie d'investissement
-Indices <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Indices",level) #Stratégie Indices
-Forex <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Forex",level) #Stratégie Forex
-Warrants <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Warrants",level) #Stratégie Warrants
-Turbos <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Turbos",level) #Stratégie Turbos
+Actions <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Actions",level) #Strat??gie de Trading
+Invests <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalysesFondamentales.php",level)#Strat??gie d'investissement
+Indices <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Indices",level) #Strat??gie Indices
+Forex <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Forex",level) #Strat??gie Forex
+Warrants <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Warrants",level) #Strat??gie Warrants
+Turbos <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php?type=Turbos",level) #Strat??gie Turbos
 Barons <- getRSSitems("http://www.zonebourse.com/rss/FeedBaronsBourse.php",level)# Barons de la bourse
-Actualites <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php",level)# Toute l'actualité
+Actualites <- getRSSitems("http://www.zonebourse.com/rss/FeedAnalyses.php",level)# Toute l'actualit??
 
 getISIN<-function(table){
   
-#a partir de guid récupérer nom et isin
+#a partir de guid r??cup??rer nom et isin
   table$NameISIN<-t(data.frame(strsplit(as.character(table$guid),"/",fixed=TRUE))[4,])
   table$Name<-as.data.frame(str_match(table$NameISIN, "^(.*)-([0-9]*)$")[,-1])[,1]
   table$ISIN<-as.data.frame(str_match(table$NameISIN, "^(.*)-([0-9]*)$")[,-1])[,2]
@@ -63,52 +63,73 @@ library(RCurl)
 library(XML)
 
 url<-"http://www.zonebourse.com/GENFIT-16311755/fondamentaux/"
+url<-"http://www.zonebourse.com/AXA-4615/fondamentaux/"
 script <- getURL(url)
 doc <- htmlParse(script)
-
-# 1ere methode
-# le code qui est sous la forme
-# table class="ReutersTabInit"
-# doit être écrit sous la forme
-# //table[@class='ReutersTabInit']
 li <- getNodeSet(doc, "//table[@class='ReutersTabInit']")
-li[[1]] #1st row
-li[[1]][[1]] #1st row, 
-li[[1]][[2]] #1st row, content
-#test2<-xmlSApply(li,xmlValue) # convertit le contenu en texte
 
-# 2e methode
-test <- xpathSApply(doc, "//td[@class='RC_tdL']") # récupère le contenu dans une liste
+rm(script);rm(doc)#rm(url);
 
-#pb le contenu est dispatché entre 2 éléments qui se suivent 
+fillTable <- function(li,print=TRUE) {
+  
+  rows <- lapply(li, xpathSApply, "//tr[@class='ReutersTabOdd']", xmlValue)
+  rows[sapply(rows, is.list)] <- NA
+    
+  t<-length(li) # nombre de tableaux
+  l<-lapply(rows, length)[[1]][[1]] # nombre de lignes dans chaque tableau #pb n'est pas le meme dans chaque
+  n<-t*l #total de lignes # du coup trop large
+  
+  DATA<-data.frame(section=character(0),title=character(0),subtitle=character(0),valY=character(0),valY1=character(0))
+  DATA$section<-as.character(DATA$section)
+  DATA$title<-as.character(DATA$title)
+  DATA$subtitle<-as.character(DATA$subtitle)
+  DATA$valY<-as.character(DATA$valY)
+  DATA$valY1<-as.character(DATA$valY1)
+  
+  m=1
+  for (i in 1:t) {
+    for (j in 1:l) {   
+      DATA[m,1]<-gsub('\\r\\n        ','',xmlValue(li[[i]][[1]][[1]][[1]])) #section_title
+      DATA[m,2]<-gsub('\r\n        ','',xmlValue(li[[i]][[j+1]][[1]][[1]][[1]]))#title
+      DATA[m,3]<-xmlValue(li[[i]][[j+1]][[1]][[3]][[1]]) #subtitle
+      DATA[m,4]<-xmlValue(li[[i]][[j+1]][[2]][[2]][[1]]) # valY
+      DATA[m,5]<-xmlValue(li[[i]][[j+1]][[3]][[2]][[1]]) # valY1      
+      m<-m+1
+    }
+  }
+  rm(i);rm(j);rm(n);rm(t);rm(l);rm(m);rm(k);rm(z)#rm(testRow);rm(z)
+  
+  #DATA<-subset(DATA,title!="NA" && valY!="NA") # a revoir, supprime 1 valeur de trop
+  del<-c(3:8,15:16,23:24,29:32); DATA<-DATA[-del,]
+  return(DATA)
+}
 
-#le titre est dans <a>, la légende dans <span>
-# le contenu de la colonne de gauche dans <b>
-test[[1]]
+rm(DATA)
+DATA<-fillTable(li)
+DATA$guid<-url
+DATA<-getISIN(DATA)
 
-categoriesTableau <- xpathSApply(doc, "//td[@class='ReutersTabTitle']") #ok
-titresLignes<- xpathSApply(doc, "//a") #trop large
-valeursLignes<- xpathSApply(doc, "//b") #ok
+# ##############################################################################################################
+# R??cup??rer liste de toutes les valeurs France  Zonebourse.com
+# ##############################################################################################################
 
-test[[1]][[1]]# test[[val impaire]][[1]] # Titre  # <a href="/formation/Capitalisation-boursiere-268/">&#13;Capitalisation</a> 
-test[[2]][[2]]# test[[val paire]][[2]] # Valeur col gauche # test[[2]][[2]] = 932M???
+url<-"http://www.zonebourse.com/bourse/actions/Europe-3/France-51/"
 
-test2 <- xpathSApply(doc, "//tr[@class='ReutersTabOdd']")
-# test3<- sapply(test2, xmlGetAttr, "style") # ok mais pas d'interet
+  getValuesList <- function(url,print=TRUE) {
+    
+    script <- getURL(url)
+    doc <- htmlParse(script)
+    DATA<-data.frame(NameISIN=character(0))
+    DATA$NameISIN<-as.character(DATA$NameISIN)
+    
+    for (i in 1:50) {
+      li <- getNodeSet(doc, paste("//td[@id='iAL",i,"']",sep=""))
+      DATA[i,1]<-gsub("/","",xmlGetAttr(li[[1]][[1]],"href"))
+    }
+    rm(script);rm(doc);rm(li)    
+    return(DATA)   
 
-test3 <- xpathSApply(test2, "//td") # ko
-test3
-
-#urls <- sapply(li, xmlGetAttr, "href")
-
-#   
-# # get ids for those with only 2 slashes (no 3rd in the end):
-# id <- which(nchar(gsub("[^/]", "", urls )) == 2)
-# slash_2 <- urls[id]
-# # find position of 3rd slash occurrence in strings:
-# slash_stop <- unlist(lapply(str_locate_all(urls, "/"),"[[", 3))
-# slash_3 <- substring(urls, first = 1, last = slash_stop - 1)
-# # final result, replace the ones with 2 slashes,
-# # which are lacking in slash_3:
-# blogs <- slash_3
-# blogs[id] <- slash_2
+  }
+  
+rm(DATA)
+DATA<-getValuesList(url)
