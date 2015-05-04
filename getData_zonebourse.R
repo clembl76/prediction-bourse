@@ -115,16 +115,16 @@ DATA<-getISIN(DATA)
 
 url<-"http://www.zonebourse.com/bourse/actions/Europe-3/France-51/"
 
-  getValuesList <- function(url,print=TRUE) {
+  getValuesList <- function(url,j,print=TRUE) {
     
     script <- getURL(url)
     doc <- htmlParse(script)
-    DATA<-data.frame(NameISIN=character(0))
-    DATA$NameISIN<-as.character(DATA$NameISIN)
     
     for (i in 1:50) {
       li <- getNodeSet(doc, paste("//td[@id='iAL",i,"']",sep=""))
-      DATA[i,1]<-gsub("/","",xmlGetAttr(li[[1]][[1]],"href"))
+      DATA[(j-1)*50+i,1]<-gsub("/","",xmlGetAttr(li[[1]][[1]],"href"))
+      li <- getNodeSet(doc, "//td[@class='large200 center']") 
+      DATA[(j-1)*50+i,2]<-xmlGetAttr(li[[i]][[1]],"title")
     }
     rm(script);rm(doc);rm(li)    
     return(DATA)   
@@ -132,4 +132,10 @@ url<-"http://www.zonebourse.com/bourse/actions/Europe-3/France-51/"
   }
   
 rm(DATA)
-DATA<-getValuesList(url)
+DATA<-data.frame(NameISIN=character(0),secteur=character(0))
+DATA$NameISIN<-as.character(DATA$NameISIN);DATA$secteur<-as.character(DATA$secteur)
+
+for (j in 1:20) {
+  url<-paste("http://www.zonebourse.com/bourse/actions/Europe-3/France-51/?Req=&p=",j,sep="")
+  DATA<-getValuesList(url,j)
+}
