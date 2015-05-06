@@ -1,6 +1,4 @@
-#install.packages("XML") 
-library(XML)
-library(stringr)
+source("loadLibraries.R")
 
 
 # ##############################################################################################################
@@ -128,52 +126,61 @@ for (j in 1:20) {
 library(RCurl)
 library(XML)
 
-
-# ok pour une valeur, reste ?? boucler pour toutes les valeurs -- voir dans la table DATA_Values_FR
-
-url<-"http://www.zonebourse.com/GENFIT-16311755/fondamentaux/"
-url<-"http://www.zonebourse.com/AXA-4615/fondamentaux/"
-script <- getURL(url)
-doc <- htmlParse(script)
-li <- getNodeSet(doc, "//table[@class='ReutersTabInit']")
-
-rm(script,doc)#rm(url);
-
-fillTable <- function(li,print=TRUE) {
+fillTable <- function(value,url,print=TRUE) {
+  
+  script <- getURL(url)
+  doc <- htmlParse(script)
+  li <- getNodeSet(doc, "//table[@class='ReutersTabInit']")
+  
+  rm(script,doc)#rm(url);
   
   rows <- lapply(li, xpathSApply, "//tr[@class='ReutersTabOdd']", xmlValue)
   rows[sapply(rows, is.list)] <- NA
   
   t<-length(li) # nombre de tableaux
   l<-lapply(rows, length)[[1]][[1]] # nombre de lignes dans chaque tableau #pb n'est pas le meme dans chaque
-  n<-t*l #total de lignes # du coup trop large
   
-  DATA_Finances<-data.frame(section=character(0),title=character(0),subtitle=character(0),valY=character(0),valY1=character(0))
-  DATA_Finances$section<-as.character(DATA_Finances$section)
-  DATA_Finances$title<-as.character(DATA_Finances$title)
-  DATA_Finances$subtitle<-as.character(DATA_Finances$subtitle)
-  DATA_Finances$valY<-as.character(DATA_Finances$valY)
-  DATA_Finances$valY1<-as.character(DATA_Finances$valY1)
-  
+  n<-nrow(DATA_Finances)
   m=1
   for (i in 1:t) {
     for (j in 1:l) {   
-      DATA_Finances[m,1]<-gsub('\\r\\n        ','',xmlValue(li[[i]][[1]][[1]][[1]])) #section_title
-      DATA_Finances[m,2]<-gsub('\r\n        ','',xmlValue(li[[i]][[j+1]][[1]][[1]][[1]]))#title
-      DATA_Finances[m,3]<-xmlValue(li[[i]][[j+1]][[1]][[3]][[1]]) #subtitle
-      DATA_Finances[m,4]<-xmlValue(li[[i]][[j+1]][[2]][[2]][[1]]) # valY
-      DATA_Finances[m,5]<-xmlValue(li[[i]][[j+1]][[3]][[2]][[1]]) # valY1      
+      DATA_Finances[n+m,1]<-gsub('\\r\\n        ','',xmlValue(li[[i]][[1]][[1]][[1]])) #section_title
+      DATA_Finances[n+m,2]<-gsub('\r\n        ','',xmlValue(li[[i]][[j+1]][[1]][[1]][[1]]))#title
+      DATA_Finances[n+m,3]<-xmlValue(li[[i]][[j+1]][[1]][[3]][[1]]) #subtitle
+      DATA_Finances[n+m,4]<-xmlValue(li[[i]][[j+1]][[2]][[2]][[1]]) # valY
+      DATA_Finances[n+m,5]<-xmlValue(li[[i]][[j+1]][[3]][[2]][[1]]) # valY1   
+      DATA_Finances[n+m,6]<-as.character(value) # NameISIN
+      DATA_Finances[n+m,7]<-i
+      DATA_Finances[n+m,8]<-j
+      DATA_Finances[n+m,9]<-m
+      DATA_Finances[n+m,10]<-url #guid
       m<-m+1
     }
   }
-  rm(i,j,n,t,l,m,k,z)#rm(testRow,z)
-  
-  #DATA_Finances<-subset(DATA_Finances,title!="NA" && valY!="NA") # a revoir, supprime 1 valeur de trop
-  del<-c(3:8,15:16,23:24,29:32); DATA_Finances<-DATA_Finances[-del,]
+  rm(i,j,t,l,m)
+
   return(DATA_Finances)
 }
 
 rm(DATA_Finances)
-DATA_Finances<-fillTable(li)
-DATA_Finances$guid<-url
+DATA_Finances<-data.frame(section=character(0),title=character(0),subtitle=character(0),valY=character(0),valY1=character(0),NameISIN=character(0),i=character(0),j=character(0),m=character(0),guid=character(0))
+DATA_Finances$section<-as.character(DATA_Finances$section)
+DATA_Finances$title<-as.character(DATA_Finances$title)
+DATA_Finances$subtitle<-as.character(DATA_Finances$subtitle)
+DATA_Finances$valY<-as.character(DATA_Finances$valY)
+DATA_Finances$valY1<-as.character(DATA_Finances$valY1)
+DATA_Finances$NameISIN<-as.character(DATA_Finances$NameISIN)
+DATA_Finances$i<-as.character(DATA_Finances$i)
+DATA_Finances$j<-as.character(DATA_Finances$j)
+DATA_Finances$m<-as.character(DATA_Finances$m)
+DATA_Finances$guid<-as.character(DATA_Finances$guid)
+
+for (j in 1:nrow(DATA_Values_FR)) {
+  value<-DATA_Values_FR$NameISIN[j]
+  url<-paste("http://www.zonebourse.com/",value,"/fondamentaux/",sep="")
+  DATA_Finances<-fillTable(value,url)
+}
+
+DATA_Finances<- DATA_Finances[ which(DATA_Finances$valY!="NA" | DATA_Finances$valY1!="NA") , ]
 DATA_Finances<-getISIN(DATA_Finances)
+rm(j,url,value)
