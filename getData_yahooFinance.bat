@@ -1,0 +1,1 @@
+"C:\Program Files\R\R-3.1.1\bin\R.exe" CMD BATCH --vanilla --slave "C:\Users\Jawad\Documents\GitHub\prediction-bourse\getData_yahooFinance.R"

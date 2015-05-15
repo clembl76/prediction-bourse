@@ -1,0 +1,189 @@
+Loading required package: XML
+Loading required package: stringr
+Loading required package: RCurl
+Loading required package: bitops
+Warning messages:
+1: package 'XML' was built under R version 3.1.3 
+2: package 'stringr' was built under R version 3.1.2 
+3: package 'RCurl' was built under R version 3.1.2 
+4: package 'bitops' was built under R version 3.1.2 
+Warning message:
+In rm(cac40_tickers) : object 'cac40_tickers' not found
+trying URL 'http://download.finance.yahoo.com/d/quotes.csv?s=,AC.PA,ACA.PA,AI.PA,AIR.PA,ALO.PA,ALU.PA,BN.PA,BNP.PA,CA.PA,CAP.PA,CS.PA,DG.PA,EDF.PA,EI.PA,EN.PA,FP.PA,FR.PA,GLE.PA,GSZ.PA,KER.PA,LG.PA,LR.PA,MC.PA,ML.PA,MT.PA,OR.PA,ORA.PA,PUB.PA,RI.PA,RNO.PA,SAF.PA,SAN.PA,SGO.PA,SOLB.PA,SU.PA,TEC.PA,UG.PA,UL.PA,VIE.PA,VIV.PA&f=aa2a5bb2b3b4b6cc1c3c4c6c8dd1d2ee1e7e8e9f0f6gg1g3g4g5g6hii5jj1j2j3j4j5j6kk1k2k3k4k5ll1l2l3mm2m3m4m5m6m7m8nn4opp1p2p5p6qrr1r2r5r6r7ss1s6s7t1t6t7t8vv1v7ww1w4xy&e=.csv'
+Content type 'application/octet-stream' length unknown
+opened URL
+downloaded 21 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=AC.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 218 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=ACA.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 184 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=AI.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 227 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=AIR.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 172 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=ALO.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 127 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=ALU.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 189 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=BN.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 222 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=BNP.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 218 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=CA.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 197 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=CAP.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 195 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=CS.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 222 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=DG.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 203 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=EDF.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 121 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=EI.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 198 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=EN.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 196 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=FP.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 218 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=FR.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 204 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=GLE.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 219 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=GSZ.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 197 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=KER.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 201 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=LG.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 200 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=LR.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 113 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=MC.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 199 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=ML.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 216 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=MT.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 131 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=OR.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 196 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=ORA.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 197 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=PUB.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 184 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=RI.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 213 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=RNO.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 195 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=SAF.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 201 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=SAN.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 195 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=SGO.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Content type 'text/csv' length unknown
+opened URL
+downloaded 198 Kb
+
+trying URL 'http://real-chart.finance.yahoo.com/table.csv?s=SOLB.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+Error in download.file(url, destFile) : 
+  cannot open URL 'http://real-chart.finance.yahoo.com/table.csv?s=SOLB.PA&a=0&b=1&c=1984&g=d&d=05&e=15&f=2015&ignore=.csv'
+In addition: Warning messages:
+1: In rm(quotesPerDay_tmp) : object 'quotesPerDay_tmp' not found
+2: In download.file(url, destFile) :
+  cannot open: HTTP status was '404 Not Found'
+Execution halted
