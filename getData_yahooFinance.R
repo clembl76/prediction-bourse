@@ -58,15 +58,7 @@ rm(url,script,doc,li,colsL,colNames)
 #http://download.finance.yahoo.com/d/quotes.csv?s=IBM&f=sl1d1t1c1ohgv&e=.csv
 
 # #############################################################################################"
-
 # all tags are in the tag.csv file
-# g  Day's Low
-# n  Name
-# o  Open
-# p  Previous Close
-# p1	Price Paid
-# s  Symbol
-# v  Volume
 tags<-read.csv("tags.csv",sep=";",header=TRUE)
 
 # concatener tous les tags
@@ -87,14 +79,52 @@ download.file(URL,destFile)
 
 # #############################################################################################"
 # read downloaded file
+# avec ça, j'ai les cotations du CAC40 à l'instant t
+# J'ai l'Open du jour et le PreviousClose
 
-cotations<-read.csv(destFile,sep=",",header=FALSE)
-names(cotations)<-make.names(names,unique = FALSE, allow_ = TRUE)
+quotes_now<-read.csv(destFile,sep=",",header=FALSE)
+names(quotes_now)<-make.names(names,unique = FALSE, allow_ = TRUE)
 
 # reste à faire: passer dans les bons formats
 # par ex tous les champs qui ont "Date" dans leur nom
-#cotations$date<-as.Date(cotations$date, "%d/%m/%y")
+#quotes_now$date<-as.Date(quotes_now$date, "%d/%m/%y")
 
+# #############################################################################################"
+# Historical data for one value per day
+# url directe de téléchargement pour une valeur
+# url<-"http://real-chart.finance.yahoo.com/table.csv?s=AC.PA&d=4&e=15&f=2015&g=d&a=0&b=3&c=2000&ignore=.csv"
+
+quotesPerDay<-data.frame(Date=as.Date(character(0)),Open=numeric(0),High=numeric(0),Low=numeric(0),Close=numeric(0),Volume=integer(0),Adj.Close=numeric(0),Symbol=character(0))
+
+begin<-Sys.Date()-365*10
+begin<-format(begin,"&a=%m&b=%d&c=%Y")
+end<-Sys.Date()
+end<-format(end,"&d=%m&e=%d&f=%Y")
+
+for (i in 1:40){
+  
+  ticker<-cac40_tickers[i,1]
+  url<-paste("http://real-chart.finance.yahoo.com/table.csv?s=",ticker,begin,"&g=d",end,"&ignore=.csv",sep="")
+  
+  # Download
+  destFile<-paste("quotesPerDay_",ticker,".csv",sep="")
+  download.file(url,destFile)
+  
+  # Read file
+  rm(quotesPerDay_tmp)
+  quotesPerDay_tmp<-read.csv(destFile,sep=",",header=TRUE)
+  quotesPerDay_tmp$Date<-as.Date(quotesPerDay_tmp$Date)
+  quotesPerDay_tmp$Symbol<-ticker
+  
+  # Add to all values' file
+  quotesPerDay<-rbind(quotesPerDay,quotesPerDay_tmp)
+  
+  if(file.exists(destFile)){file.remove(destFile)}
+  
+}
+
+rm(destFile,begin,end,i,URL,url,quotesPerDay_tmp)
+# #############################################################################################"
 
 rm(URL,url,destFile,i,j,cac40_tickers_list,tagsToRead,tickerSymbols,names)
 setwd(saveDir)
