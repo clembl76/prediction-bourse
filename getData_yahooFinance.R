@@ -111,7 +111,7 @@ begin<-"&a=0&b=1&c=1984"
 end<-Sys.Date()
 end<-format(end,"&d=%m&e=%d&f=%Y")
 
-for (i in 1:40){
+for (i in 1:nrow(tickers)){
   
   ticker<-tickers[i,1]
   url<-paste("http://real-chart.finance.yahoo.com/table.csv?s=",ticker,begin,"&g=d",end,"&ignore=.csv",sep="")
@@ -133,7 +133,10 @@ for (i in 1:40){
   
 }
 quotesPerDay<-merge(tickers,quotesPerDay,by="Symbol")
-
+quotesPerDay$Symbol<-as.factor(quotesPerDay$Symbol)
+quotesPerDay$Name<-as.factor(quotesPerDay$Name)
+quotesPerDay$Stock<-as.factor(quotesPerDay$Stock)
+str(quotesPerDay)
 
 rm(destFile,begin,end,i,URL,url,quotesPerDay_tmp,ticker)
 # #############################################################################################"
