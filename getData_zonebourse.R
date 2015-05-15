@@ -119,6 +119,8 @@ for (j in 1:20) {
   DATA_Values_FR<-getValuesList(url,j)
 }
 
+DATA_Values_FR$Name<-as.data.frame(str_match(DATA_Values_FR$NameISIN, "^(.*)-([0-9]*)$")[,-1])[,1]
+DATA_Values_FR$ISIN<-as.data.frame(str_match(DATA_Values_FR$NameISIN, "^(.*)-([0-9]*)$")[,-1])[,2]
 
 # ##############################################################################################################
 # Aspirateur page Finances d'une valeur Zonebourse.com
